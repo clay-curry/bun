@@ -12,6 +12,7 @@ const std = @import("std");
 
 const lex = bun.js_lexer;
 const logger = @import("root").bun.logger;
+const RegularExpression = @import("../bun.js/bindings/RegularExpression.zig").RegularExpression;
 
 const options = @import("../options.zig");
 const js_parser = bun.js_parser;
@@ -247,6 +248,9 @@ pub const RunCommand = struct {
         var combined_script: []u8 = copy_script.items;
 
         log("Script: \"{s}\"", .{combined_script});
+        log("Original Script: \"{s}\"", .{script});
+        log("Name: \"{s}\"", .{name});
+        log("CWD: \"{s}\"", .{cwd});
 
         if (passthrough.len > 0) {
             var combined_script_len = script.len;
