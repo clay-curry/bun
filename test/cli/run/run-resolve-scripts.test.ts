@@ -18,6 +18,10 @@ beforeAll(() => {
       "name": "run-regex-test",
       "description": "invokes scripts from CLI and package.scripts using regex patterns",
       "scripts": {
+        "echo:sub1": "echo sub1 succeeded",
+        "echo:sub2": "abacadabra this should error",
+        "echo:sub3": "echo sub3 succeeded",
+        "echo": "pnpm run /^echo:/",
         "test:subroutine-one": "echo 'invoked test:subroutine-one'",
         "test:subroutine-two": "echo 'invoked test:subroutine-two'",
         "test": "bun run /^test:/",
@@ -98,7 +102,21 @@ describe("bun", () => {
     expect(exitCode).toBe(0);
   });
 });
-test("should invoke all matching patterns from package.json", () => {
+test("should invoke every 'echo:' subroutine. should fail for one", () => {
+  const arbitraryRegexPattern = new RegExp(/^echo:/).toString();
+  const { exitCode, stdout, stderr } = spawnSync({
+    cwd,
+    // TODO: determine if this test is necessary (or desired)
+    cmd: [bunExe(), "run", `${arbitraryRegexPattern}`], // coerce type to string (with double quotes)
+    env: bunEnv,
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  expect(stdout.toString()).toMatch(/invoked arbitrary.js/);
+  expect(stderr.toString()).toBeEmpty();
+  expect(exitCode).toBe(0);
+});
+test("should invoke every 'test:' subroutine in package.json", () => {
   const matchingPattern = new RegExp(/^test:/);
   const { exitCode, stdout, stderr } = spawnSync({
     cwd,
