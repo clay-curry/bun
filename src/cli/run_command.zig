@@ -247,10 +247,17 @@ pub const RunCommand = struct {
 
         var combined_script: []u8 = copy_script.items;
 
+        log("\n", .{});
         log("Script: \"{s}\"", .{combined_script});
         log("Original Script: \"{s}\"", .{script});
         log("Name: \"{s}\"", .{name});
         log("CWD: \"{s}\"", .{cwd});
+        log("Passthrough: \"{s}\"", .{passthrough});
+        log("Shell: \"{s}\"", .{shell_bin});
+        log("Passthorugh len: {d}", .{passthrough.len});
+        log("Silent: {d}", .{silent});
+        log("\n", .{});
+
 
         if (passthrough.len > 0) {
             var combined_script_len = script.len;
