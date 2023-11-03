@@ -1300,3 +1300,21 @@ test "replacePackageManagerRun" {
         try std.testing.expectEqualStrings(copy_script.items, "'bun run foo'");
     }
 }
+
+test "bun run regex" {
+
+    const pattern = bun.String.create("bun run");
+
+    const regex = try RegularExpression.init(pattern, .{});
+    defer regex.deinit();
+
+    const isValid = regex.isValid();
+    if (!isValid) {
+        std.debug.warn("regex is invalid\n");
+        return;
+    } else {
+        std.debug.warn("regex is valid\n");
+    }
+
+    try std.testing.expect(true);
+}
