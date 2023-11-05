@@ -88,6 +88,13 @@ pub fn detectAndLoadOtherLockfile(this: *Lockfile, allocator: Allocator, log: *l
         return lockfile;
     }
 
+    // clay/pnpm TODO: implement the following block by drawing on the above code (~20 minutes)
+    pnpm: {
+        const pnpm_lockfile_name = "pnpm-lock.yaml";
+        _ = pnpm_lockfile_name;
+        break :pnpm;
+    }
+
     return LoadFromDiskResult{ .not_found = {} };
 }
 
@@ -939,6 +946,17 @@ pub fn migrateNPMLockfile(this: *Lockfile, allocator: Allocator, log: *logger.Lo
     this.meta_hash = try this.generateMetaHash(false);
 
     return LoadFromDiskResult{ .ok = this };
+}
+
+// clay/pnpm TODO: implement the following block by drawing on the above code (~40 minutes)
+pub fn migratePNPMLockfile(this: *Lockfile, allocator: Allocator, log: *logger.Log, data: string, path: string) !LoadFromDiskResult {
+    debug("begin lockfile migration", .{});
+    _ = path;
+    _ = data;
+    _ = log;
+    _ = allocator;
+    _ = this;
+    return error.NotImplemented;
 }
 
 fn packageNameFromPath(pkg_path: []const u8) []const u8 {
