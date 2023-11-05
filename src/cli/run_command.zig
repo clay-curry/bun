@@ -12,7 +12,6 @@ const std = @import("std");
 
 const lex = bun.js_lexer;
 const logger = @import("root").bun.logger;
-const RegularExpression = @import("../bun.js/bindings/RegularExpression.zig").RegularExpression;
 
 const options = @import("../options.zig");
 const js_parser = bun.js_parser;
@@ -247,17 +246,7 @@ pub const RunCommand = struct {
 
         var combined_script: []u8 = copy_script.items;
 
-        log("\n", .{});
         log("Script: \"{s}\"", .{combined_script});
-        log("Original Script: \"{s}\"", .{script});
-        log("Name: \"{s}\"", .{name});
-        log("CWD: \"{s}\"", .{cwd});
-        log("Passthrough: \"{s}\"", .{passthrough});
-        log("Shell: \"{s}\"", .{shell_bin});
-        log("Passthorugh len: {d}", .{passthrough.len});
-        log("Silent: {d}", .{silent});
-        log("\n", .{});
-
 
         if (passthrough.len > 0) {
             var combined_script_len = script.len;
@@ -1066,6 +1055,10 @@ pub const RunCommand = struct {
                         }
                     },
                     else => {
+
+                        // TODO: REGEX MATCHER GOES HERE
+
+                        // TODO: DECOMPOSE FOLLOWING LINES INTO A FUNCTION CALLED FOR EACH REGEX MATCH
                         if (scripts.get(script_name_to_search)) |script_content| {
                             // allocate enough to hold "post${scriptname}"
 
@@ -1299,22 +1292,4 @@ test "replacePackageManagerRun" {
         try RunCommand.replacePackageManagerRun(&copy_script, "'npm run foo'");
         try std.testing.expectEqualStrings(copy_script.items, "'bun run foo'");
     }
-}
-
-test "bun run regex" {
-
-    const pattern = bun.String.create("bun run");
-
-    const regex = try RegularExpression.init(pattern, .{});
-    defer regex.deinit();
-
-    const isValid = regex.isValid();
-    if (!isValid) {
-        std.debug.warn("regex is invalid\n");
-        return;
-    } else {
-        std.debug.warn("regex is valid\n");
-    }
-
-    try std.testing.expect(true);
 }
